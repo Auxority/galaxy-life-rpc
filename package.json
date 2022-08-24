@@ -1,0 +1,19 @@
+{
+  "name": "discord-custom-rpc",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc && node ."
+  },
+  "dependencies": {
+    "discord-rpc": "^4.0.1",
+    "dotenv": "^16.0.1",
+    "node-fetch": "^3.2.10"
+  },
+  "devDependencies": {
+    "@types/discord-rpc": "^4.0.3",
+    "@types/node": "^18.7.11"
+  }
+}
