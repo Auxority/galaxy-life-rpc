@@ -16,7 +16,7 @@ export default class GLServerPinger {
         const start = performance.now();
         const res = await fetch(this._serverUrl);
         this.measureResponseTime(start);
-        return res.status === 200;
+        return res.status !== 503;
     }
 
     public ping(): string {
