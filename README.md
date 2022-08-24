@@ -59,9 +59,9 @@ To run this project you'll need a few things.
 
 * [gl-logo-online](https://cdn.discordapp.com/attachments/302318511764799488/1011913086724210748/gl-logo-online.png)
 
-* [starling-happy](https://cdn.discordapp.com/attachments/302318511764799488/1011913366966636574/starling-happy.png)
+* [starling-happy](https://media.discordapp.net/attachments/302318511764799488/1011936906990325770/starling-happy.png)
 
-* [starling-scared](https://cdn.discordapp.com/attachments/302318511764799488/1011913375107792896/starling-scared.png)
+* [starling-scared](https://media.discordapp.net/attachments/302318511764799488/1011936993132937297/starling-scared.png)
 
 14) Open a terminal in the folder you have extracted. (see step 3) A simple way to to do this, is by typing `cmd` in this bar and pressing the Enter/Return key on your keyboard.
 
