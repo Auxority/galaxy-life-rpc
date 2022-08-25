@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const UPDATE_DELAY_SECONDS = 10;
+const UPDATE_DELAY_SECONDS = 30;
 
 const client = new DiscordRPC.Client({
     transport: "ipc"
