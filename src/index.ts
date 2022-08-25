@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const UPDATE_DELAY_SECONDS = 30;
+const UPDATE_DELAY_SECONDS = 10;
 
 const client = new DiscordRPC.Client({
     transport: "ipc"
@@ -21,6 +21,16 @@ const updateActivity = async () => {
         largeImageText: "Galaxy Life",
         smallImageKey: isOnline ? "starling-happy" : "starling-scared",
         smallImageText: isOnline ? "Online" : "Offline",
+        buttons: [
+            {
+                label: "Play",
+                url: "steam://run/1927780"
+            },
+            {
+                label: "Show this on your profile",
+                url: "steam://openurl/https://github.com/Auxority/galaxy-life-rpc"
+            }
+        ],
         instance: false
     });
 }
