@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const UPDATE_DELAY_SECONDS = 30;
+const UPDATE_DELAY_SECONDS = 10;
 
 const client = new DiscordRPC.Client({
     transport: "ipc"
@@ -17,29 +17,32 @@ const generateState = (isMasterOnline: boolean, isAuthOnline: boolean): string =
 }
 
 const updateActivity = async () => {
-    const isOnline = await serverPinger.updateStatus();
+    try {
+        const isOnline = await serverPinger.updateStatus();
+        const newState = generateState(serverPinger.isMasterOnline(), serverPinger.isAuthOnline());
 
-    const newState = generateState(serverPinger.isMasterOnline(), serverPinger.isAuthOnline());
-
-    client.setActivity({
-        details: `Ping: ${serverPinger.ping()}ms`,
-        state: newState,
-        largeImageKey: isOnline ? "gl-logo-online" : "gl-logo-offline",
-        largeImageText: "Galaxy Life",
-        smallImageKey: isOnline ? "starling-happy" : "starling-scared",
-        smallImageText: isOnline ? "Online" : "Offline",
-        buttons: [
-            {
-                label: "Play",
-                url: "steam://run/1927780"
-            },
-            {
-                label: "Show this on your profile",
-                url: "https://github.com/Auxority/galaxy-life-rpc"
-            }
-        ],
-        instance: false
-    });
+        client.setActivity({
+            details: `Ping: ${serverPinger.ping()}ms`,
+            state: newState,
+            largeImageKey: isOnline ? "gl-logo-online" : "gl-logo-offline",
+            largeImageText: "Galaxy Life",
+            smallImageKey: isOnline ? "starling-happy" : "starling-scared",
+            smallImageText: isOnline ? "Online" : "Offline",
+            buttons: [
+                {
+                    label: "Play",
+                    url: "steam://run/1927780"
+                },
+                {
+                    label: "Show this on your profile",
+                    url: "https://github.com/Auxority/galaxy-life-rpc"
+                }
+            ],
+            instance: false
+        });
+    } catch (error) {
+        console.error(error);
+    }
 }
 
 client.on("ready", () => {
