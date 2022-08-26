@@ -3,24 +3,50 @@ import { performance } from "perf_hooks";
 
 export default class GLServerPinger {
     private static readonly MASTER_URL = "https://game.galaxylifegame.net/director/getMaster";
+    private static readonly AUTH_URL = "https://auth.phoenixnetwork.net/oauth2/auth";
+    private _isMasterOnline: boolean;
+    private _isAuthOnline: boolean;
     private _currentPing: number;
     private _serverUrl: string;
 
     public constructor() {
+        this._isMasterOnline = false;
+        this._isAuthOnline = false;
         this._currentPing = -1;
         this._serverUrl = "";
     }
 
-    public async isOnline(): Promise<boolean> {
+    public async updateStatus(): Promise<boolean> {
         await this.updateServerUrl();
+        await this.updateAuthStatus();
+
         const start = performance.now();
-        const res = await fetch(this._serverUrl);
+        await this.updateMasterStatus();
         this.measureResponseTime(start);
-        return res.status !== 503;
+
+        return this._isMasterOnline && this._isAuthOnline;
+    }
+
+    public isAuthOnline(): boolean {
+        return this._isAuthOnline;
+    }
+
+    public isMasterOnline(): boolean {
+        return this._isMasterOnline;
     }
 
     public ping(): string {
         return this.formatNumber(this._currentPing);
+    }
+
+    private async updateMasterStatus(): Promise<void> {
+        const res = await fetch(GLServerPinger.MASTER_URL);
+        this._isMasterOnline = res.status !== 503;
+    }
+
+    private async updateAuthStatus(): Promise<void> {
+        const res = await fetch(GLServerPinger.AUTH_URL);
+        this._isAuthOnline = res.status !== 502;
     }
 
     private async updateServerUrl(): Promise<void> {

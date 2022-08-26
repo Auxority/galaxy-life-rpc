@@ -12,11 +12,18 @@ const client = new DiscordRPC.Client({
 
 const serverPinger = new GLServerPinger();
 
+const generateState = (isMasterOnline: boolean, isAuthOnline: boolean): string => {
+    return isMasterOnline ? (isAuthOnline ? "Servers are online" : "Authentication servers are offline") : "Servers are offline";
+}
+
 const updateActivity = async () => {
-    const isOnline = await serverPinger.isOnline();
+    const isOnline = await serverPinger.updateStatus();
+
+    const newState = generateState(serverPinger.isMasterOnline(), serverPinger.isAuthOnline());
+
     client.setActivity({
         details: `Ping: ${serverPinger.ping()}ms`,
-        state: `Servers are ${isOnline ? "online" : "offline"}`,
+        state: newState,
         largeImageKey: isOnline ? "gl-logo-online" : "gl-logo-offline",
         largeImageText: "Galaxy Life",
         smallImageKey: isOnline ? "starling-happy" : "starling-scared",
@@ -28,7 +35,7 @@ const updateActivity = async () => {
             },
             {
                 label: "Show this on your profile",
-                url: "steam://openurl/https://github.com/Auxority/galaxy-life-rpc"
+                url: "https://github.com/Auxority/galaxy-life-rpc"
             }
         ],
         instance: false
