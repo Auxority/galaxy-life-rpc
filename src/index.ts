@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const UPDATE_DELAY_SECONDS = 30;
+const UPDATE_DELAY_SECONDS = 10;
 
 const client = new DiscordRPC.Client({
     transport: "ipc"
@@ -13,7 +13,8 @@ const client = new DiscordRPC.Client({
 const serverPinger = new GLServerPinger();
 
 const generateState = (isMasterOnline: boolean, isAuthOnline: boolean): string => {
-    return isMasterOnline ? (isAuthOnline ? "Servers are online" : "Authentication servers are offline") : "Servers are offline";
+    console.log(`Master server: ${isMasterOnline} - Auth server: ${isAuthOnline}`);
+    return isMasterOnline === true ? (isAuthOnline === true ? "Servers are online" : "Authentication servers are offline") : "Servers are offline";
 }
 
 const updateActivity = async () => {

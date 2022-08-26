@@ -40,7 +40,7 @@ export default class GLServerPinger {
     }
 
     private async updateMasterStatus(): Promise<void> {
-        const res = await fetch(GLServerPinger.MASTER_URL);
+        const res = await fetch(this._serverUrl);
         this._isMasterOnline = res.status !== 503;
     }
 
