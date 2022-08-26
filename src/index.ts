@@ -13,7 +13,6 @@ const client = new DiscordRPC.Client({
 const serverPinger = new GLServerPinger();
 
 const generateState = (isMasterOnline: boolean, isAuthOnline: boolean): string => {
-    console.log(`Master server: ${isMasterOnline} - Auth server: ${isAuthOnline}`);
     return isMasterOnline === true ? (isAuthOnline === true ? "Servers are online" : "Authentication servers are offline") : "Servers are offline";
 }
 
