@@ -17,14 +17,26 @@ export default class GLServerPinger {
     }
 
     public async updateStatus(): Promise<boolean> {
-        await this.updateServerUrl();
-        await this.updateAuthStatus();
+        try {
+            await this.updateServerUrl();
+        } catch (e: any) {
+            console.error("Cannot find server url.");
+        }
 
-        const start = performance.now();
-        await this.updateMasterStatus();
-        this.measureResponseTime(start);
+        try {
+            await this.updateAuthStatus();
+        } catch (e: any) {
+            console.error("Auth servers have changed.");
+        }
 
-        return this._isMasterOnline && this._isAuthOnline;
+        try {
+            const start = performance.now();
+            await this.updateMasterStatus();
+            this.measureResponseTime(start);
+            return this._isMasterOnline && this._isAuthOnline;
+        } catch (e: any) {
+            throw new Error(e);
+        }
     }
 
     public isAuthOnline(): boolean {

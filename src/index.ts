@@ -16,33 +16,33 @@ const generateState = (isMasterOnline: boolean, isAuthOnline: boolean): string =
     return isMasterOnline === true ? (isAuthOnline === true ? "Servers are online" : "Authentication servers are offline") : "Servers are offline";
 }
 
-const updateActivity = async () => {
-    try {
-        const isOnline = await serverPinger.updateStatus();
-        const newState = generateState(serverPinger.isMasterOnline(), serverPinger.isAuthOnline());
+const silentError = (err: any) => {
 
-        client.setActivity({
-            details: `Ping: ${serverPinger.ping()}ms`,
-            state: newState,
-            largeImageKey: isOnline ? "gl-logo-online" : "gl-logo-offline",
-            largeImageText: "Galaxy Life",
-            smallImageKey: isOnline ? "starling-happy" : "starling-scared",
-            smallImageText: isOnline ? "Online" : "Offline",
-            buttons: [
-                {
-                    label: "Play",
-                    url: "steam://run/1927780"
-                },
-                {
-                    label: "Show this on your profile",
-                    url: "https://github.com/Auxority/galaxy-life-rpc"
-                }
-            ],
-            instance: false
-        });
-    } catch (error) {
-        console.error(error);
-    }
+};
+
+const updateActivity = async () => {
+    const isOnline = await serverPinger.updateStatus().catch(silentError);
+    const newState = generateState(serverPinger.isMasterOnline(), serverPinger.isAuthOnline());
+
+    client.setActivity({
+        details: `Ping: ${serverPinger.ping()}ms`,
+        state: newState,
+        largeImageKey: isOnline ? "gl-logo-online" : "gl-logo-offline",
+        largeImageText: "Galaxy Life",
+        smallImageKey: isOnline ? "starling-happy" : "starling-scared",
+        smallImageText: isOnline ? "Online" : "Offline",
+        buttons: [
+            {
+                label: "Play",
+                url: "steam://run/1927780"
+            },
+            {
+                label: "Show this on your profile",
+                url: "https://github.com/Auxority/galaxy-life-rpc"
+            }
+        ],
+        instance: false
+    });
 }
 
 client.on("ready", () => {
