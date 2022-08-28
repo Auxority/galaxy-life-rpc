@@ -13,12 +13,8 @@ const client = new DiscordRPC.Client({
 const serverPinger = new GLServerPinger();
 
 const generateState = (isMasterOnline: boolean, isAuthOnline: boolean): string => {
-    return isMasterOnline === true ? (isAuthOnline === true ? "Servers are online" : "Authentication servers are offline") : "Servers are offline";
+    return isMasterOnline ? (isAuthOnline ? "Servers are online" : "Authentication servers are offline") : "Servers are offline";
 }
-
-const silentError = (err: any) => {
-
-};
 
 const updateActivity = async () => {
     const isOnline = await serverPinger.updateStatus().catch(silentError);
@@ -48,9 +44,7 @@ const updateActivity = async () => {
 client.on("ready", () => {
     console.log(`Authenticated for user: ${client.user?.username}`);
     updateActivity();
-    setInterval(() => {
-        updateActivity();
-    }, UPDATE_DELAY_SECONDS * 1000);
+    setInterval(updateActivity, UPDATE_DELAY_SECONDS * 1000);
 });
 
 client.login({
