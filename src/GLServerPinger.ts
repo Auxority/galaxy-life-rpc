@@ -4,6 +4,7 @@ import { performance } from "perf_hooks";
 export default class GLServerPinger {
     private static readonly MASTER_URL = "https://game.galaxylifegame.net/director/getMaster";
     private static readonly AUTH_URL = "https://auth.phoenixnetwork.net/oauth2/auth";
+    private static readonly CALLBACK_URL = "https://game.galaxylifegame.net/oauth-callback";
     private _isMasterOnline: boolean;
     private _isAuthOnline: boolean;
     private _currentPing: number;
@@ -58,7 +59,8 @@ export default class GLServerPinger {
 
     private async updateAuthStatus(): Promise<void> {
         const res = await fetch(GLServerPinger.AUTH_URL);
-        this._isAuthOnline = res.status !== 502;
+        const res2 = await fetch(GLServerPinger.CALLBACK_URL);
+        this._isAuthOnline = res.status !== 502 && res2.status !== 500;
     }
 
     private async updateServerUrl(): Promise<void> {
