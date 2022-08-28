@@ -17,7 +17,7 @@ const generateState = (isMasterOnline: boolean, isAuthOnline: boolean): string =
 }
 
 const updateActivity = async () => {
-    const isOnline = await serverPinger.updateStatus().catch(silentError);
+    const isOnline = await serverPinger.updateStatus().catch(() => {});
     const newState = generateState(serverPinger.isMasterOnline(), serverPinger.isAuthOnline());
 
     client.setActivity({
