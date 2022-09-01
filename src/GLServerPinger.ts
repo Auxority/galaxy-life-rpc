@@ -53,7 +53,7 @@ export default class GLServerPinger {
 
     private async updateMasterStatus(): Promise<void> {
         const res = await fetch(this._serverUrl);
-        this._isMasterOnline = res.status !== 503;
+        this._isMasterOnline = (res.status !== 503 && res.status !== 504);
     }
 
     private async updateAuthStatus(): Promise<void> {
